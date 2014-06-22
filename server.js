@@ -3,6 +3,16 @@
 var express = require('express');
 var fs      = require('fs');
 
+var mongojs = require('mongojs');
+var connection_string = process.env.OPENSHIFT_APP_NAME || 'ircbot';
+if(process.env.OPENSHIFT_MONGODB_DB_PASSWORD){
+  connection_string = process.env.OPENSHIFT_MONGODB_DB_USERNAME + ":" +
+  process.env.OPENSHIFT_MONGODB_DB_PASSWORD + "@" +
+  process.env.OPENSHIFT_MONGODB_DB_HOST + '/' +
+  process.env.OPENSHIFT_APP_NAME;
+}
+var db = mongojs(connection_string, ['scoreboard']);
+
 
 /**
  *  Define the sample application.
@@ -157,30 +167,38 @@ var zapp = new SampleApp();
 zapp.initialize();
 zapp.start();
 
-
 // Create the configuration
 var config = {
-    channels: ["##bbot"],
     server: "irc.freenode.net",
-    botName: "locutie",
-    floodProtection: true,
-    floodProtectionDelay: 1000,
+    botName: process.env.IRC_BOTNAME, 
+    password: process.env.IRC_PASSWORD,
+    channels: ['##' + process.env.IRC_BOTNAME],
 };
 
 var irc = require('irc');
 var bot = new irc.Client(config.server, config.botName, {
-    channels: ['#bbot'],
+    channels: config.channels, 
     port: 8001,
     debug: true,
     sasl: true,
-    password: 'oJUDUwzUxIh2',
+    password: config.password, 
     userName: config.botName
 });
 
+// Listen for joins
+bot.addListener("join", function(channel, who) {
+    // Welcome them in!
+    if( who.match( config.botName)) {
+      bot.say(channel, 'It is I, the fearsome ' + config.botName + '. I have come to ' + channel + ' to assimilate y\'all!');
+    } else {
+      bot.say(channel, who + ", welcome back!");
+    }
+});
+
 bot.addListener('message', function(from, to, message) {
-    if(  message.indexOf('Know any good jokes?') > -1
-      || message.indexOf('good joke') > -1
+    if(  message.indexOf('hello') > -1
+      || message.indexOf('Hello') > -1
     ) {
-        bot.say(to, 'Knock knock!');
+        bot.say(to, 'hi, ' + from);
     }
 });
