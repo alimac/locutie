@@ -2,8 +2,8 @@
 //  OpenShift sample Node application
 var express = require('express');
 var fs      = require('fs');
-
 var mongojs = require('mongojs');
+
 var connection_string = process.env.OPENSHIFT_APP_NAME || 'ircbot';
 if(process.env.OPENSHIFT_MONGODB_DB_PASSWORD){
   connection_string = process.env.OPENSHIFT_MONGODB_DB_USERNAME + ":" +
@@ -123,7 +123,7 @@ var SampleApp = function() {
      */
     self.initializeServer = function() {
         self.createRoutes();
-        self.app = express.createServer();
+        self.app = express();
 
         //  Add handlers for the app (from the routes).
         for (var r in self.routes) {
@@ -188,11 +188,12 @@ var bot = new irc.Client(config.server, config.botName, {
 // Listen for joins
 bot.addListener("join", function(channel, who) {
     // Welcome them in!
-    if( who.match( config.botName)) {
+    console.log( who);
+    if( who == config.botName) {
       bot.say(channel, 'It is I, the fearsome ' + config.botName + '. I have come to ' + channel + ' to assimilate y\'all!');
     } else {
       bot.say(channel, who + ", welcome back!");
-    }
+    } 
 });
 
 bot.addListener('message', function(from, to, message) {
