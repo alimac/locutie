@@ -157,3 +157,17 @@ var zapp = new SampleApp();
 zapp.initialize();
 zapp.start();
 
+var irc = require('irc');
+var bot = new irc.Client('chat.freenode.net', process.env.OPENSHIFT_APP_NAME || 'ircbot', {
+    channels: ['#bbot'],
+    port: 8001,
+    debug: true
+});
+
+bot.addListener('message', function(from, to, message) {
+    if(  message.indexOf('Know any good jokes?') > -1
+      || message.indexOf('good joke') > -1
+    ) {
+        bot.say(to, 'Knock knock!');
+    }
+});
