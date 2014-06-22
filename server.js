@@ -180,8 +180,8 @@ var bot = new irc.Client(config.server, config.botName, {
     channels: config.channels, 
     port: 8001,
     debug: true,
-    sasl: true,
-    password: config.password, 
+    //sasl: true,
+    //password: config.password, 
     userName: config.botName,
     floodProtection: true,
     floodProtectionDelay: 1000
