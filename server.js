@@ -159,7 +159,7 @@ zapp.start();
 
 
 // Create the configuration
-var ircConfig = {
+var config = {
     channels: ["##bbot"],
     server: "irc.freenode.net",
     botName: "locutie",
