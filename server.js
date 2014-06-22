@@ -168,7 +168,7 @@ var config = {
 };
 
 var irc = require('irc');
-var bot = new irc.Client(config.server, process.env.OPENSHIFT_APP_NAME || config.botName, {
+var bot = new irc.Client(config.server, config.botName, {
     channels: ['#bbot'],
     port: 8001,
     debug: true,
