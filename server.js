@@ -170,7 +170,7 @@ zapp.start();
 // Create the configuration
 var config = {
     server: "irc.freenode.net",
-    botName: process.env.IRC_BOTNAME || 'locutie', 
+    botName: process.env.IRC_BOTNAME, 
     password: process.env.IRC_PASSWORD,
     channels: ['##' + process.env.IRC_BOTNAME]
 };
@@ -180,8 +180,8 @@ var bot = new irc.Client(config.server, config.botName, {
     channels: config.channels, 
     port: 8001,
     debug: true,
-    //sasl: true,
-    //password: config.password, 
+    sasl: true,
+    password: config.password, 
     userName: config.botName,
     floodProtection: true,
     floodProtectionDelay: 1000
