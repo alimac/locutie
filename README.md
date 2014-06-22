@@ -1,3 +1,3 @@
-The OpenShift `nodejs` cartridge documentation can be found at:
+# Locutie
+An experiment in IRC bot design using Node.js.
 
-http://openshift.github.io/documentation/oo_cartridge_guide.html#nodejs
