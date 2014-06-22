@@ -157,11 +157,24 @@ var zapp = new SampleApp();
 zapp.initialize();
 zapp.start();
 
+
+// Create the configuration
+var ircConfig = {
+    channels: ["##bbot"],
+    server: "irc.freenode.net",
+    botName: "locutie",
+    floodProtection: true,
+    floodProtectionDelay: 1000,
+};
+
 var irc = require('irc');
-var bot = new irc.Client('chat.freenode.net', process.env.OPENSHIFT_APP_NAME || 'ircbot', {
+var bot = new irc.Client(config.server, process.env.OPENSHIFT_APP_NAME || config.botName, {
     channels: ['#bbot'],
     port: 8001,
-    debug: true
+    debug: true,
+    sasl: true,
+    password: 'oJUDUwzUxIh2',
+    userName: config.botName
 });
 
 bot.addListener('message', function(from, to, message) {
